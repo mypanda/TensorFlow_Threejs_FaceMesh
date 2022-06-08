@@ -1,46 +1,56 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { flattenFacialLandMarkArray, createBufferAttribute } from './utils/faceMesh'
+import WebcamCanvas from './utils/WebcamCanvas'
+import ThreeSetUp from './utils/sceneSetUp'
+import faceLandMark from './faceLandmark'
+import PointCloud from './pointCloud'
 
-const scene = new THREE.Scene()
+class FacePointCloud {
+	threeSetUp: ThreeSetUp;
+	setUpElements: ThreeSetUpElements;
+	webcamCanvas: WebcamCanvas;
+	pointCloud: PointCloud;
+	faceMeshDetector: faceLandMark;
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-camera.position.z = 2
+	constructor() {
+		this.threeSetUp = new ThreeSetUp()
+		this.setUpElements = this.threeSetUp.getSetUp()
+		this.webcamCanvas = new WebcamCanvas();
+		this.pointCloud = new PointCloud()
+		this.faceMeshDetector = new faceLandMark()
+	}
 
-const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)
+	async bindFaceDataToPointCloud(){
+		const keypoints = await this.faceMeshDetector.detectFace(this.webcamCanvas.canvas)
+		const flatData = flattenFacialLandMarkArray(keypoints)
+		const facePositions = createBufferAttribute(flatData)
+		this.pointCloud.updateProperty(facePositions, 'position')
+	}
 
-const controls = new OrbitControls(camera, renderer.domElement)
+	async initWork() {
+		const { camera, scene, renderer } = this.setUpElements
+		camera.position.z = 3
+		camera.position.y = 1
+		camera.lookAt(0,0,0)
+		const orbitControlsUpdate = this.threeSetUp.applyOrbitControls()
+		
+		const gridHelper = new THREE.GridHelper(10, 10)
+		scene.add(gridHelper)
+		scene.add(this.pointCloud.cloud)
 
-const geometry = new THREE.BoxGeometry()
-const material = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: true,
-})
+		await this.faceMeshDetector.loadDetector()
 
-const cube = new THREE.Mesh(geometry, material)
-scene.add(cube)
+		const animate = () => {
+			requestAnimationFrame(animate)
+			if (this.webcamCanvas.receivingStreem) this.bindFaceDataToPointCloud()
+			this.webcamCanvas.updateFromWebCam()
+		
+			orbitControlsUpdate()
+			renderer.render(scene, camera)
+		}
 
-window.addEventListener('resize', onWindowResize, false)
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    render()
+		animate()
+	}
 }
 
-function animate() {
-    requestAnimationFrame(animate)
-
-    cube.rotation.x += 0.01
-    cube.rotation.y += 0.01
-
-    controls.update()
-
-    render()
-}
-
-function render() {
-    renderer.render(scene, camera)
-}
-animate()
+new FacePointCloud().initWork()
