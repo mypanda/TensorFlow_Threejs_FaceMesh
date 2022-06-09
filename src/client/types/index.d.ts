@@ -38,20 +38,23 @@ interface rotationReturn {
 }
 
 interface FaceLandmarkBox {
-    height: number;
-    width: number;
-    xMax: number;
-    xMin: number;
-    yMax: number;
-    yMin: number;
+    height: number
+    width: number
+    xMax: number
+    xMin: number
+    yMax: number
+    yMin: number
 }
 
 interface FaceLandmark {
-  keypoints: vector[];
-  box: FaceLandmarkBox;
+    keypoints: vector[]
+    box: FaceLandmarkBox
 }
 
-interface Sizes{height: number, width: number}
+interface Sizes {
+    height: number
+    width: number
+}
 
 interface ThreeSetUpElements {
     camera: THREE.PerspectiveCamera
