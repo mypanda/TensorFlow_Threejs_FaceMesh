@@ -1,7 +1,6 @@
-export default class TrackingSetup {
+export default class WebcamVideo {
   videoTarget: HTMLVideoElement;
   videoConstraints: { audio: boolean; video: { width: number; height: number; }; };
-  receivingData: boolean;
   aspectRatio: number;
   onReceivingData: ()=>void;
 
@@ -11,7 +10,6 @@ export default class TrackingSetup {
     this.aspectRatio = 
       this.videoConstraints.video.width/
       this.videoConstraints.video.height
-    this.receivingData = false
     this.onReceivingData = onReceivingData
     this.init();
   }
@@ -28,11 +26,10 @@ export default class TrackingSetup {
     })
   }
 
-  onLoadMetadata(){
+  private onLoadMetadata(){
     this.videoTarget.setAttribute('autoplay', 'true')
     this.videoTarget.setAttribute('playsinline', 'true')
     this.videoTarget.play()
-    this.receivingData = true
     this.onReceivingData()
   }
 }

@@ -21,7 +21,6 @@ export default class FaceMeshDetector {
       refineLandmarks: true,
       solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
      }
-
     this.detector = null;
   }
 
@@ -38,7 +37,8 @@ export default class FaceMeshDetector {
   }
 
   async detectFace(source: faceLandmarksDetection.FaceLandmarksDetectorInput){
-    const data = await this.detector!.estimateFaces(source)
+    if(!this.detector) throw new Error('call the loadDetector method first on this class before calling this')
+    const data = await this.detector.estimateFaces(source)
     const keypoints = (data as FaceLandmark[])[0]?.keypoints
     if(keypoints) return keypoints;
     return [];

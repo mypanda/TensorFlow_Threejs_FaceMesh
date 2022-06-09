@@ -1,14 +1,14 @@
-import TrackingSetup from './TrackingSource'
+import WebcamVideo from './WebcamVideo'
 
 export default class WebcamCanvas {
-  private readonly webcamVideo: TrackingSetup;
+  private readonly webcamVideo: WebcamVideo;
   canvas: HTMLCanvasElement;
   canvasSize: number;
   receivingStreem: boolean;
   private readonly canvasCtx: CanvasRenderingContext2D;
 
   constructor(canvasSize = 500){
-    this.webcamVideo = new TrackingSetup(this.setReceivingStreem.bind(this))
+    this.webcamVideo = new WebcamVideo(this.setReceivingStreem.bind(this))
     this.canvasSize = canvasSize;
     this.canvas = document.createElement('canvas');
     this.canvasCtx = this.canvas.getContext('2d') as CanvasRenderingContext2D;

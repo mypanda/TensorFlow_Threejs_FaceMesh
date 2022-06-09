@@ -16,8 +16,8 @@ class FacePointCloud {
 		this.threeSetUp = new ThreeSetUp()
 		this.setUpElements = this.threeSetUp.getSetUp()
 		this.webcamCanvas = new WebcamCanvas();
-		this.pointCloud = new PointCloud()
 		this.faceMeshDetector = new faceLandMark()
+		this.pointCloud = new PointCloud()
 	}
 
 	async bindFaceDataToPointCloud(){

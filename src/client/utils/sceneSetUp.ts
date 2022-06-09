@@ -21,7 +21,7 @@ class ThreeSetUp {
     this.init();
   }
 
-  init(){
+  private init(){
     document.body.appendChild(this.renderer.domElement)
     this.renderer.setSize(this.sizes.width, this.sizes.height)
     this.renderer.setPixelRatio(Math.max(window.devicePixelRatio, 2))
@@ -31,7 +31,7 @@ class ThreeSetUp {
     this.initResizeResponse()
   }
 
-  initResizeResponse(){
+  private initResizeResponse(){
     window.addEventListener('resize', () => {
       // Update sizes
     this.sizes.width = window.innerWidth
