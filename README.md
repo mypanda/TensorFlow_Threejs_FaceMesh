@@ -1,3 +1,6 @@
+# Real-time face mesh point cloud with Three.JS, Tensorflow.js and Typescript
+https://techtee.medium.com/real-time-face-mesh-point-cloud-with-three-js-tensorflow-js-and-typescript-1f37ae844e1f
+
 # Three.js TypeScript Boilerplate
 
 This boilerplate is supplementary to my book titled **Three.js and TypeScript** (ASIN : B09GYTKRCH)
